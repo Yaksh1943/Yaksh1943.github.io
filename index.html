@@ -1,228 +1,612 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yaksh Varu — AI/ML Engineer</title>
-<meta name="description" content="Portfolio of Yaksh Varu, AI/ML Engineer specializing in LLM integration, backend systems, and applied machine learning.">
-<meta name="color-scheme" content="light dark">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yaksh Varu — AI/ML Engineer | Generative AI & Backend Systems</title>
+  <meta name="description" content="Portfolio of Yaksh Varu, AI/ML Engineer specializing in production LLM systems, RAG pipelines, multi-agent architectures, and scalable backends.">
+  <meta name="keywords" content="Yaksh Varu, AI Engineer, ML Engineer, Generative AI, RAG, Multi-Agent, FastAPI, Python, Go, QueryLens">
+  <meta name="color-scheme" content="dark light">
+
+  <!-- Open Graph / Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Yaksh Varu — AI/ML Engineer">
+  <meta property="og:description" content="AI/ML Engineer specializing in production LLM applications, RAG pipelines, and high-performance backend systems.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<nav>
-  <div class="wrap">
-    <a class="nav-logo" href="#" aria-label="Yaksh Varu — home">
-      <span class="nav-logo-badge">YV</span>
-      <span class="nav-logo-text">Yaksh Varu</span>
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">about</a></li>
-      <li><a href="#skills">skills</a></li>
-      <li><a href="#experience">experience</a></li>
-      <li><a href="#projects">projects</a></li>
-      <li><a href="#contact">contact</a></li>
-    </ul>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="wrap nav-wrap">
+      <a class="nav-logo" href="#" aria-label="Yaksh Varu — Home">
+        <span class="nav-logo-badge">YV</span>
+        <span class="nav-logo-text">Yaksh Varu</span>
+      </a>
 
-<header class="hero">
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <div class="avatar-badge">YV</div>
-      <h1>Yaksh Varu<span class="accent-dot">.</span></h1>
-      <div class="role">AI Engineer · AI Developer</div>
-      <p class="pitch">I've built and shipped AI features into real production products — integrating OpenAI, Gemini, and other models into working software people actually use, alongside the backend systems that support them. I'm now expanding into the data side of ML, and prefer building that depth through real-world problems over theory alone.</p>
-      <div class="hero-links">
-        <a class="btn primary" href="#projects">view projects</a>
-        <a class="btn" href="mailto:yaksh.190403varu@gmail.com">say hello</a>
-        <a class="btn" href="https://github.com/Yaksh1943" target="_blank" rel="noopener">github</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#experience" class="nav-link">Experience</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#education" class="nav-link">Education</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Theme Toggle Button -->
+        <button id="themeToggle" class="icon-btn" aria-label="Toggle light and dark theme" title="Toggle theme">
+          <svg class="sun-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <a class="btn nav-resume-btn" href="mailto:yaksh.190403varu@gmail.com?subject=Resume%20Request%20-%20Yaksh%20Varu">
+          <span>Get in Touch</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+        </a>
+
+        <!-- Mobile Menu Hamburger -->
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
+  </nav>
 
-    <div class="hero-visual" aria-hidden="true">
-      <div class="window">
-        <div class="window-bar">
-          <span class="wdot" style="background:#FF5F57;"></span>
-          <span class="wdot" style="background:#FEBC2E;"></span>
-          <span class="wdot" style="background:#28C840;"></span>
-          <span class="window-title">whoami.py</span>
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <div class="status-pill">
+          <span class="pulse-dot"></span>
+          <span>Open to AI/ML & Backend Opportunities</span>
         </div>
-        <div class="window-body">
-<pre><span class="c-kw">class</span> <span class="c-cls">Engineer</span>:
-    <span class="c-kw">def</span> <span class="c-fn">__init__</span>(self):
-        self.name = <span class="c-str">"Yaksh Varu"</span>
-        self.role = <span class="c-str">"AI/ML Engineer"</span>
-        self.stack = [<span class="c-str">"Python"</span>, <span class="c-str">"Go"</span>, <span class="c-str">"SQL"</span>]
-        self.focus = [
-            <span class="c-str">"LLM integration"</span>,
-            <span class="c-str">"backend systems"</span>,
-            <span class="c-str">"applied ML"</span>,
-        ]
-        self.status = <span class="c-str">"open_to_work"</span> <span class="c-cmt"># true</span>
 
-<span class="c-var">yaksh</span> = Engineer()</pre>
+        <h1 class="hero-title">
+          Yaksh Varu<span class="accent-dot">.</span>
+        </h1>
+
+        <div class="role-badge-row">
+          <span class="role-pill">AI/ML Engineer</span>
+          <span class="role-pill">LLM Systems</span>
+          <span class="role-pill">Backend Architect</span>
+        </div>
+
+        <p class="pitch">
+          Specializing in <strong>production LLM applications</strong>, <strong>hybrid RAG pipelines</strong>, and <strong>multi-agent architectures</strong>. Proven experience taking AI features from research into production for <strong>50K+ users</strong>, engineering MCP tooling, and reducing LLM inference costs by up to <strong>92%</strong>.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="#projects">
+            <span>Explore Projects</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <button class="btn secondary" id="copyEmailBtn" data-email="yaksh.190403varu@gmail.com">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span class="btn-text">Copy Email</span>
+          </button>
+          <a class="btn outline" href="https://github.com/Yaksh1943" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            <span>GitHub</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Visual: Interactive Python Window -->
+      <div class="hero-visual" aria-label="Interactive engineer card">
+        <div class="window">
+          <div class="window-bar">
+            <div class="window-controls">
+              <span class="wdot close"></span>
+              <span class="wdot min"></span>
+              <span class="wdot zoom"></span>
+            </div>
+            <div class="window-tabs">
+              <button class="tab-btn active" id="tabSourceBtn">whoami.py</button>
+              <button class="tab-btn" id="tabOutputBtn">stdout <span class="tab-badge">ready</span></button>
+            </div>
+            <button class="run-code-btn" id="runCodeBtn" title="Execute script">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <span>Run</span>
+            </button>
+          </div>
+
+          <div class="window-body">
+            <!-- Source Code View -->
+            <pre id="codeView"><code><span class="c-kw">from</span> dataclasses <span class="c-kw">import</span> dataclass
+
+<span class="c-dec">@dataclass</span>
+<span class="c-kw">class</span> <span class="c-cls">AIEngineer</span>:
+    name: <span class="c-type">str</span> = <span class="c-str">"Yaksh Varu"</span>
+    core_focus: <span class="c-type">tuple</span> = (
+        <span class="c-str">"Production LLM Systems"</span>,
+        <span class="c-str">"Hybrid RAG Pipelines"</span>,
+        <span class="c-str">"Multi-Agent & Tooling (MCP)"</span>,
+        <span class="c-str">"FastAPI & Go Microservices"</span>
+    )
+    status: <span class="c-type">str</span> = <span class="c-str">"Ready to deploy"</span>
+
+    <span class="c-kw">def</span> <span class="c-fn">get_impact</span>(self) -> <span class="c-type">dict</span>:
+        <span class="c-kw">return</span> {
+            <span class="c-str">"user_scale"</span>: <span class="c-str">"50,000+ active users"</span>,
+            <span class="c-str">"token_cost_cut"</span>: <span class="c-str">"~92% via semantic cache"</span>,
+            <span class="c-str">"eval_workflow"</span>: <span class="c-str">"LLM-as-a-judge automated baselines"</span>
+        }
+
+engineer = AIEngineer()
+<span class="c-fn">print</span>(engineer.get_impact())</code></pre>
+
+            <!-- Output View (Initially Hidden) -->
+            <pre id="outputView" class="hidden-view"><code><span class="out-dim">[python3 whoami.py]</span>
+<span class="out-success">✓ Executed in 12ms</span>
+
+<span class="out-json">{</span>
+  <span class="out-key">"name"</span>: <span class="out-val">"Yaksh Varu"</span>,
+  <span class="out-key">"role"</span>: <span class="out-val">"AI/ML Engineer"</span>,
+  <span class="out-key">"scale"</span>: <span class="out-val">"50,000+ active users"</span>,
+  <span class="out-key">"token_cost_reduction"</span>: <span class="out-val">"~92% (QueryLens)"</span>,
+  <span class="out-key">"repeat_query_latency"</span>: <span class="out-val">"~70% cut"</span>,
+  <span class="out-key">"specialties"</span>: [
+    <span class="out-val">"Hybrid RAG (FastEmbed + BM25 + FlashRank)"</span>,
+    <span class="out-val">"Multi-Agent Systems & AST Validation"</span>,
+    <span class="out-val">"Model Context Protocol (MCP) Tooling"</span>
+  ],
+  <span class="out-key">"status"</span>: <span class="out-val-highlight">"AVAILABLE_FOR_HIRE"</span>
+<span class="out-json">}</span></code></pre>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<section id="about">
-  <div class="wrap">
-    <div class="eyebrow">about</div>
-    <div class="about-grid reveal">
-      <div>
-        <p>I'm an AI/ML engineer with a year of experience shipping AI-powered features into production. My work spans integrating large language model APIs into real applications, building backend systems in Python and Go, and everything between design and deploy.</p>
-        <p>I care about building things that actually work at scale, not just in a notebook. Currently focused on applied ML, LLM-powered tooling, and cloud infrastructure.</p>
+  <!-- Metric Highlights Strip -->
+  <section class="metrics-strip">
+    <div class="wrap metrics-grid">
+      <div class="metric-card">
+        <div class="metric-number">50K+</div>
+        <div class="metric-label">Users Served in Production</div>
+        <div class="metric-desc">Scaled conversational AI features from 5K to 50K+ active users</div>
       </div>
-      <div class="tags">
-        <span class="tag">LLM Integration</span>
-        <span class="tag">Backend APIs</span>
-        <span class="tag">Recommendation Systems</span>
-        <span class="tag">Cloud & Infra</span>
+      <div class="metric-card">
+        <div class="metric-number">~92%</div>
+        <div class="metric-label">Token Cost Savings</div>
+        <div class="metric-desc">Via semantic vector caching & dynamic schema linking</div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section id="skills">
-  <div class="wrap">
-    <div class="eyebrow">skills</div>
-    <h2 class="section-title">What I work with</h2>
-    <div class="skills-grid reveal">
-      <div class="skill-cat">
-        <h3>languages</h3>
-        <div class="tags"><span class="tag">Python</span><span class="tag">Go</span><span class="tag">SQL</span></div>
+      <div class="metric-card">
+        <div class="metric-number">~70%</div>
+        <div class="metric-label">Latency Reduction</div>
+        <div class="metric-desc">Accelerating repeated query cycles with AST reflection loops</div>
       </div>
-      <div class="skill-cat">
-        <h3>ai / ml</h3>
-        <div class="tags">
-          <span class="tag">OpenAI API</span><span class="tag">Gemini API</span><span class="tag">LangChain</span>
-          <span class="tag">Scikit-learn</span><span class="tag">TensorFlow</span><span class="tag">PyTorch</span>
-        </div>
-      </div>
-      <div class="skill-cat">
-        <h3>backend & db</h3>
-        <div class="tags">
-          <span class="tag">REST APIs</span><span class="tag">Django</span><span class="tag">MySQL</span>
-          <span class="tag">Firebase</span><span class="tag">Firestore</span>
-        </div>
-      </div>
-      <div class="skill-cat">
-        <h3>tools</h3>
-        <div class="tags">
-          <span class="tag">Git</span><span class="tag">AWS</span><span class="tag">Power BI</span>
-          <span class="tag">Jupyter</span><span class="tag">Colab</span>
-        </div>
+      <div class="metric-card">
+        <div class="metric-number">Hybrid RAG</div>
+        <div class="metric-label">Dense + Sparse + Cross-Encoder</div>
+        <div class="metric-desc">FastEmbed, BM25 & FlashRank reranking for high precision</div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="experience">
-  <div class="wrap">
-    <div class="eyebrow">experience</div>
-    <h2 class="section-title">Where I've worked</h2>
-    <div class="timeline reveal">
-      <div class="tl-item">
-        <div class="tl-header">
-          <div class="tl-role">AI/ML Engineer · <span class="tl-company">Canopas</span></div>
-          <div class="tl-dates">Jul 2025 — Jul 2026</div>
+  <!-- About Section -->
+  <section id="about">
+    <div class="wrap">
+      <div class="eyebrow">about me</div>
+      <div class="about-grid reveal">
+        <div class="about-text">
+          <h2 class="section-title">Bridging state-of-the-art AI models with enterprise-grade engineering.</h2>
+          <p>
+            I am an <strong>AI/ML Engineer</strong> with a strong Computer Science foundation and professional experience building end-to-end AI applications, distributed APIs, and database-backed services.
+          </p>
+          <p>
+            Rather than relying solely on black-box model calls, I focus on the architectural mechanics that make AI reliable at scale: <strong>hybrid retrieval pipelines</strong> combining dense and sparse search, <strong>Model Context Protocol (MCP)</strong> tooling, <strong>LLM-as-a-judge evaluation frameworks</strong>, and <strong>self-healing agent reflection loops</strong> with strict AST verification.
+          </p>
+          <p>
+            Whether implementing asynchronous worker queues with AWS SQS or crafting low-latency microservices with FastAPI and Go, I build systems engineered for determinism, security, and real user value.
+          </p>
         </div>
-        <ul>
-          <li>Developed AI-powered features by integrating OpenAI and Gemini APIs into production applications.</li>
-          <li>Contributed to backend development using Python and Go, supporting REST API implementation and application functionality.</li>
-          <li>Participated in application design, implementation, testing, debugging, and technical documentation.</li>
-          <li>Used AWS services for S3 bucket management, logging, and basic infrastructure configuration.</li>
-          <li>Collaborated with cross-functional teams to deliver scalable AI-assisted features.</li>
-        </ul>
+
+        <div class="about-highlights">
+          <div class="highlight-item">
+            <div class="hl-icon">⚡</div>
+            <div>
+              <h4>Production LLM Systems</h4>
+              <p>End-to-end generative AI pipelines, function calling, structured outputs, and prompt evaluation baselines.</p>
+            </div>
+          </div>
+          <div class="highlight-item">
+            <div class="hl-icon">🔍</div>
+            <div>
+              <h4>Advanced RAG & Vector Search</h4>
+              <p>Hybrid retrieval (dense + sparse BM25), cross-encoder reranking, and semantic vector caching.</p>
+            </div>
+          </div>
+          <div class="highlight-item">
+            <div class="hl-icon">🛠️</div>
+            <div>
+              <h4>Autonomous & Multi-Agent AI</h4>
+              <p>MCP-based tool use, deterministic query repair, and self-healing reflection loops using AST validation.</p>
+            </div>
+          </div>
+          <div class="highlight-item">
+            <div class="hl-icon">☁️</div>
+            <div>
+              <h4>Robust Backend & Cloud</h4>
+              <p>FastAPI, Go, PostgreSQL, asynchronous worker queues (AWS SQS), and cloud infrastructure (S3, SES).</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="projects">
-  <div class="wrap">
-    <div class="eyebrow">projects</div>
-    <h2 class="section-title">Things I've built</h2>
-    <div class="projects-grid reveal">
+  <!-- Experience Section -->
+  <section id="experience">
+    <div class="wrap">
+      <div class="eyebrow">experience</div>
+      <h2 class="section-title">Where I've delivered impact</h2>
 
-      <div class="card">
-        <h3>QueryLens</h3>
-        <p>A text-to-SQL system that turns plain-English questions into validated SQL, real results, and a natural-language explanation — with the full reasoning trace visible. Includes ambiguity detection, an evaluation harness, and a query cache that cuts token cost ~92% on repeat questions.</p>
-        <div class="tags"><span class="tag">FastAPI</span><span class="tag">React</span><span class="tag">Gemini API</span><span class="tag">PostgreSQL</span></div>
-        <div class="card-links">
-          <a href="https://github.com/Yaksh1943/query-lens" target="_blank" rel="noopener">→ github</a>
+      <div class="timeline reveal">
+        <div class="tl-item">
+          <div class="tl-header">
+            <div>
+              <h3 class="tl-role">AI/ML Engineer</h3>
+              <div class="tl-company-row">
+                <span class="tl-company">Canopas</span>
+                <span class="tl-badge">Production Scale</span>
+              </div>
+            </div>
+            <div class="tl-dates">Jul 2025 — Jul 2026</div>
+          </div>
+
+          <ul class="tl-bullets">
+            <li>
+              <strong>Scaled AI Features to 50K+ Users:</strong> Built and integrated LLM-powered features directly into production software, supporting a product expansion that grew from 5–10K to <strong>50K+ active users</strong>.
+            </li>
+            <li>
+              <strong>Engineered MCP-Based Tooling & LLM-as-a-Judge:</strong> Designed AI features utilizing the <strong>Model Context Protocol (MCP)</strong>, including dynamic AI-generated user notifications and automated <strong>LLM-as-a-judge evaluation workflows</strong> benchmarking live model outputs against ideal conversation baselines.
+            </li>
+            <li>
+              <strong>Conversational Voice & Text AI:</strong> Contributed to production-grade conversational AI systems featuring multi-modal text and voice interactions, personalized via user-selected personas and dynamic conversational context memory.
+            </li>
+            <li>
+              <strong>High-Performance Async Backends:</strong> Developed robust backend REST APIs featuring authentication, asynchronous task execution, and automated testing; contributed to relational database schema design, debugging, and production feature delivery.
+            </li>
+            <li>
+              <strong>Event-Driven Cloud Architecture:</strong> Managed cloud services across <strong>AWS S3, SES, and SQS</strong> to power reliable asynchronous workflows, email delivery, and distributed data pipelines.
+            </li>
+          </ul>
+
+          <div class="tl-tags">
+            <span class="tag">LLM Applications</span>
+            <span class="tag">MCP Tooling</span>
+            <span class="tag">LLM-as-a-Judge</span>
+            <span class="tag">FastAPI</span>
+            <span class="tag">Python</span>
+            <span class="tag">AWS SQS / S3 / SES</span>
+            <span class="tag">Conversational AI</span>
+          </div>
         </div>
       </div>
-
-      <div class="card">
-        <h3>Meeting Helper</h3>
-        <p>An AI-assisted meeting solution that captures discussions, generates summaries, and shares them with participants automatically.</p>
-        <div class="tags"><span class="tag">Python</span><span class="tag">LLM APIs</span></div>
-        <div class="card-links">
-          <a href="https://github.com/Yaksh1943/Meeting-helper" target="_blank" rel="noopener">→ github</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Book Recommendation System</h3>
-        <p>A content-based recommendation engine using feature extraction and similarity scoring to suggest books.</p>
-        <div class="tags"><span class="tag">Python</span><span class="tag">Scikit-learn</span></div>
-        <div class="card-links">
-          <a href="https://github.com/Yaksh1943/book-recommender" target="_blank" rel="noopener">→ github</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Movie Recommendation System</h3>
-        <p>A movie recommendation engine built on TF-IDF vectorization and cosine similarity over a Pandas pipeline.</p>
-        <div class="tags"><span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">Scikit-learn</span></div>
-        <div class="card-links">
-          <a href="https://github.com/Yaksh1943/Movie-Recommender" target="_blank" rel="noopener">→ github</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Boston Housing Price Prediction</h3>
-        <p>A regression model for housing prices with feature engineering and data preprocessing.</p>
-        <div class="tags"><span class="tag">Python</span><span class="tag">Scikit-learn</span></div>
-        <div class="card-links">
-          <a href="https://github.com/Yaksh1943/House-price" target="_blank" rel="noopener">→ github</a>
-        </div>
-      </div>
-
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="contact" style="border-bottom:none;">
-  <div class="wrap contact reveal">
-    <div class="eyebrow" style="justify-content:center;">contact</div>
-    <h2>Get in touch</h2>
-    <p>Have a question, a project in mind, or just want to talk shop about AI and backend systems? Feel free to reach out.</p>
-    <a class="contact-email" href="mailto:yaksh.190403varu@gmail.com">yaksh.190403varu@gmail.com</a>
-    <div class="social-row">
-      <a href="https://github.com/Yaksh1943" target="_blank" rel="noopener">github ↗</a>
-      <a href="https://www.linkedin.com/in/yaksh-varu-8677042a8" target="_blank" rel="noopener">linkedin ↗</a>
-      <a href="tel:+919574994202">+91 9574994202</a>
+  <!-- Projects Section -->
+  <section id="projects">
+    <div class="wrap">
+      <div class="eyebrow">featured work</div>
+      <h2 class="section-title">Systems & Architecture</h2>
+
+      <!-- Flagship Project Showcase: QueryLens -->
+      <div class="flagship-card reveal">
+        <div class="flagship-header">
+          <div class="flagship-tag-row">
+            <span class="flagship-badge">★ Flagship System</span>
+            <span class="flagship-sub">Text-to-SQL Analytics Platform</span>
+          </div>
+          <div class="card-links">
+            <a href="https://github.com/Yaksh1943/query-lens" target="_blank" rel="noopener" class="repo-link">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              <span>View Source Code ↗</span>
+            </a>
+          </div>
+        </div>
+
+        <h3 class="flagship-title">QueryLens — Autonomous Text-to-SQL & Visual Analytics</h3>
+        
+        <p class="flagship-desc">
+          A production-grade analytics platform that translates natural language questions into syntactically validated SQL, executes the queries against live relational databases, and automatically generates interactive visual charts (Recharts) with an interpretable step-by-step reasoning trace.
+        </p>
+
+        <!-- Technical Architecture Highlights -->
+        <div class="arch-grid">
+          <div class="arch-box">
+            <span class="arch-icon">⚡</span>
+            <h4>Semantic Vector Caching</h4>
+            <p>Embeds query intents to serve identical or near-identical questions from cache, cutting token costs by <strong>~92%</strong> and reducing repeat-query latency by <strong>~70%</strong>.</p>
+          </div>
+          <div class="arch-box">
+            <span class="arch-icon">🔍</span>
+            <h4>Hybrid RAG Retrieval</h4>
+            <p>Combines local CPU embeddings (<strong>FastEmbed / BGE-small</strong>), <strong>BM25 keyword search</strong>, and <strong>FlashRank cross-encoder reranking</strong> for high-accuracy schema linking and few-shot example selection.</p>
+          </div>
+          <div class="arch-box">
+            <span class="arch-icon">🛡️</span>
+            <h4>Deterministic AST Self-Healing</h4>
+            <p>Architected a multi-agent system with strict Abstract Syntax Tree (AST) validation using <strong>sqlglot</strong> and bounded self-healing reflection loops to catch syntax errors and repair malformed queries before execution.</p>
+          </div>
+        </div>
+
+        <div class="flagship-meta">
+          <div class="tags">
+            <span class="tag">FastAPI</span>
+            <span class="tag">React</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">FastEmbed (BGE-small)</span>
+            <span class="tag">FlashRank Reranker</span>
+            <span class="tag">sqlglot AST</span>
+            <span class="tag">Recharts</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selected Projects Grid -->
+      <div class="projects-grid reveal">
+
+        <!-- Card: Book Recommendation System -->
+        <div class="card">
+          <div class="card-top">
+            <span class="card-badge">Semantic Search + RecSys</span>
+            <div class="card-links">
+              <a href="https://github.com/Yaksh1943/book-recommender" target="_blank" rel="noopener" aria-label="GitHub Repository">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                <span>Code ↗</span>
+              </a>
+            </div>
+          </div>
+          <h3>Semantic Book Discovery Engine</h3>
+          <p>
+            An intelligent recommendation and discovery engine leveraging <strong>Hugging Face transformers</strong> and <strong>LangChain</strong>. Blends deep semantic vector search with content-based metadata filtering and features an interactive Gradio interface for live similarity exploration.
+          </p>
+          <div class="tags">
+            <span class="tag">Hugging Face</span>
+            <span class="tag">LangChain</span>
+            <span class="tag">Vector Search</span>
+            <span class="tag">Gradio</span>
+            <span class="tag">Python</span>
+          </div>
+        </div>
+
+        <!-- Card: Meeting Helper -->
+        <div class="card">
+          <div class="card-top">
+            <span class="card-badge">Productivity AI Agent</span>
+            <div class="card-links">
+              <a href="https://github.com/Yaksh1943/Meeting-helper" target="_blank" rel="noopener" aria-label="GitHub Repository">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                <span>Code ↗</span>
+              </a>
+            </div>
+          </div>
+          <h3>AI Meeting Intelligence Helper</h3>
+          <p>
+            An automated meeting transcription and summarization assistant. Captures conversational audio/text transcripts, applies structured prompt chains to extract key decisions and assigned action items, and automates dispatch to participants.
+          </p>
+          <div class="tags">
+            <span class="tag">LLM APIs</span>
+            <span class="tag">FastAPI</span>
+            <span class="tag">Prompt Engineering</span>
+            <span class="tag">Async I/O</span>
+          </div>
+        </div>
+
+      </div>
     </div>
+  </section>
+
+  <!-- Technical Skills Section -->
+  <section id="skills">
+    <div class="wrap">
+      <div class="eyebrow">capabilities</div>
+      <h2 class="section-title">Technical Expertise</h2>
+
+      <div class="skills-grid reveal">
+        <!-- Category 1: Generative AI & LLMs -->
+        <div class="skill-cat">
+          <div class="skill-cat-header">
+            <span class="skill-icon">🤖</span>
+            <h3>LLM Systems & Generative AI</h3>
+          </div>
+          <div class="tags">
+            <span class="tag highlighted">LLM Applications</span>
+            <span class="tag highlighted">RAG Architectures</span>
+            <span class="tag highlighted">Multi-Agent Systems</span>
+            <span class="tag highlighted">Model Context Protocol (MCP)</span>
+            <span class="tag">Prompt Engineering</span>
+            <span class="tag">LLM-as-a-Judge Evaluation</span>
+            <span class="tag">LangChain</span>
+            <span class="tag">Hugging Face</span>
+            <span class="tag">Vector Search</span>
+          </div>
+        </div>
+
+        <!-- Category 2: Machine Learning & Data -->
+        <div class="skill-cat">
+          <div class="skill-cat-header">
+            <span class="skill-icon">📊</span>
+            <h3>Machine Learning & Data Science</h3>
+          </div>
+          <div class="tags">
+            <span class="tag">PyTorch</span>
+            <span class="tag">TensorFlow</span>
+            <span class="tag">Scikit-learn</span>
+            <span class="tag">Pandas</span>
+            <span class="tag">NumPy</span>
+            <span class="tag">Feature Engineering</span>
+            <span class="tag">Recommender Systems</span>
+            <span class="tag">Model Development</span>
+          </div>
+        </div>
+
+        <!-- Category 3: Backend & Database Engineering -->
+        <div class="skill-cat">
+          <div class="skill-cat-header">
+            <span class="skill-icon">⚙️</span>
+            <h3>Backend Systems & Databases</h3>
+          </div>
+          <div class="tags">
+            <span class="tag highlighted">FastAPI</span>
+            <span class="tag">REST APIs</span>
+            <span class="tag">Async Processing</span>
+            <span class="tag">Message Queues</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">Firebase / Firestore</span>
+            <span class="tag">Database Schema Design</span>
+          </div>
+        </div>
+
+        <!-- Category 4: Languages & Cloud Tools -->
+        <div class="skill-cat">
+          <div class="skill-cat-header">
+            <span class="skill-icon">☁️</span>
+            <h3>Languages & Cloud Infrastructure</h3>
+          </div>
+          <div class="tags">
+            <span class="tag highlighted">Python</span>
+            <span class="tag">TypeScript</span>
+            <span class="tag">SQL</span>
+            <span class="tag">Go</span>
+            <span class="tag">AWS S3 / SES / SQS</span>
+            <span class="tag">Git & GitHub</span>
+            <span class="tag">Jupyter / Colab</span>
+            <span class="tag">AI-Assisted Dev (Cursor/Codex)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education & Certifications Section -->
+  <section id="education">
+    <div class="wrap">
+      <div class="eyebrow">background</div>
+      <h2 class="section-title">Education & Credentials</h2>
+
+      <div class="edu-grid reveal">
+        <!-- Education Card -->
+        <div class="edu-card">
+          <div class="edu-badge">Degree</div>
+          <h3 class="edu-degree">Bachelor of Engineering — Computer Science & Engineering</h3>
+          <div class="edu-minor">Minor in Artificial Intelligence and Machine Learning</div>
+          <div class="edu-institution">R.N.G. Patel Institute of Technology — Gujarat Technological University</div>
+          <div class="edu-year">2020 — 2024</div>
+        </div>
+
+        <!-- Certifications Card -->
+        <div class="cert-card">
+          <div class="edu-badge">Verified Certifications</div>
+          
+          <div class="cert-item">
+            <div class="cert-institution-badge">IIT Madras</div>
+            <div class="cert-info">
+              <h4>Data Science for Engineers</h4>
+              <p>Comprehensive training in statistical foundations, data modeling, and algorithmic computation.</p>
+            </div>
+          </div>
+
+          <div class="cert-divider"></div>
+
+          <div class="cert-item">
+            <div class="cert-institution-badge">NIT Surat</div>
+            <div class="cert-info">
+              <h4>Machine Learning & Accelerated Computing</h4>
+              <p>Hands-on high-performance computing, distributed model training, and applied ML paradigms.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="wrap contact-container reveal">
+      <div class="eyebrow">get in touch</div>
+      <h2 class="contact-title">Let's build something remarkable.</h2>
+      <p class="contact-desc">
+        I am actively open to discussing full-time engineering roles, AI consulting, and high-impact backend systems. Feel free to connect directly.
+      </p>
+
+      <div class="contact-card">
+        <a class="contact-email-link" href="mailto:yaksh.190403varu@gmail.com">
+          yaksh.190403varu@gmail.com
+        </a>
+
+        <div class="contact-cta-row">
+          <button class="btn primary" id="contactCopyBtn" data-email="yaksh.190403varu@gmail.com">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span class="btn-text">Copy Email Address</span>
+          </button>
+          <a class="btn secondary" href="tel:+919574994202">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <span>+91 9574994202</span>
+          </a>
+        </div>
+
+        <div class="social-row">
+          <a href="https://github.com/Yaksh1943" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            <span>GitHub Profile ↗</span>
+          </a>
+          <a href="https://www.linkedin.com/in/yaksh-varu-8677042a8" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            <span>LinkedIn Profile ↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap footer-wrap">
+      <p>&copy; 2026 Yaksh Varu. Engineered with semantic HTML, modern CSS & vanilla JS.</p>
+      <div class="footer-links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="toast" role="alert" aria-live="polite">
+    <span class="toast-icon">✓</span>
+    <span id="toastMessage">Email copied to clipboard!</span>
   </div>
-</section>
 
-<footer>
-  <p>&copy; 2026 Yaksh Varu. All rights reserved.</p>
-</footer>
+  <!-- Back to Top Button -->
+  <button id="backToTop" class="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+  </button>
 
-<button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
-
-<script src="js/script.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
