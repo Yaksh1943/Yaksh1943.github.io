@@ -1,29 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // =========================================================
-  // 1. THEME SWITCHER (Dark / Light with LocalStorage)
-  // =========================================================
-  const themeToggle = document.getElementById('themeToggle');
-  const htmlRoot = document.documentElement;
-
-  // Determine initial theme: saved preference -> system preference -> default dark
-  const savedTheme = localStorage.getItem('portfolio-theme');
-  if (savedTheme) {
-    htmlRoot.setAttribute('data-theme', savedTheme);
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-    htmlRoot.setAttribute('data-theme', 'light');
-  } else {
-    htmlRoot.setAttribute('data-theme', 'dark');
-  }
-
-  if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-      const currentTheme = htmlRoot.getAttribute('data-theme') || 'dark';
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      htmlRoot.setAttribute('data-theme', newTheme);
-      localStorage.setItem('portfolio-theme', newTheme);
-    });
-  }
+  // Light Theme Enforced
+  document.documentElement.setAttribute('data-theme', 'light');
 
   // =========================================================
   // 2. MOBILE NAVIGATION
@@ -75,45 +53,54 @@ document.addEventListener('DOMContentLoaded', () => {
   highlightNavOnScroll();
 
   // =========================================================
-  // 4. INTERACTIVE CODE WINDOW (whoami.py tabs & runner)
+  // 4. INTERACTIVE CODE WINDOW (3 Tabs: Python, SQL, Output)
   // =========================================================
   const tabSourceBtn = document.getElementById('tabSourceBtn');
+  const tabSqlBtn = document.getElementById('tabSqlBtn');
   const tabOutputBtn = document.getElementById('tabOutputBtn');
   const codeView = document.getElementById('codeView');
+  const sqlView = document.getElementById('sqlView');
   const outputView = document.getElementById('outputView');
   const runCodeBtn = document.getElementById('runCodeBtn');
 
-  function switchTab(showOutput) {
-    if (showOutput) {
-      tabOutputBtn.classList.add('active');
-      tabSourceBtn.classList.remove('active');
-      codeView.classList.add('hidden-view');
-      outputView.classList.remove('hidden-view');
-    } else {
+  function activateTab(tabName) {
+    // Reset all buttons
+    [tabSourceBtn, tabSqlBtn, tabOutputBtn].forEach(btn => {
+      if (btn) btn.classList.remove('active');
+    });
+    // Hide all views
+    [codeView, sqlView, outputView].forEach(v => {
+      if (v) v.classList.add('hidden-view');
+    });
+
+    if (tabName === 'source' && tabSourceBtn && codeView) {
       tabSourceBtn.classList.add('active');
-      tabOutputBtn.classList.remove('active');
-      outputView.classList.add('hidden-view');
       codeView.classList.remove('hidden-view');
+    } else if (tabName === 'sql' && tabSqlBtn && sqlView) {
+      tabSqlBtn.classList.add('active');
+      sqlView.classList.remove('hidden-view');
+    } else if (tabName === 'output' && tabOutputBtn && outputView) {
+      tabOutputBtn.classList.add('active');
+      outputView.classList.remove('hidden-view');
     }
   }
 
-  if (tabSourceBtn && tabOutputBtn) {
-    tabSourceBtn.addEventListener('click', () => switchTab(false));
-    tabOutputBtn.addEventListener('click', () => switchTab(true));
-  }
+  if (tabSourceBtn) tabSourceBtn.addEventListener('click', () => activateTab('source'));
+  if (tabSqlBtn) tabSqlBtn.addEventListener('click', () => activateTab('sql'));
+  if (tabOutputBtn) tabOutputBtn.addEventListener('click', () => activateTab('output'));
 
   if (runCodeBtn) {
     runCodeBtn.addEventListener('click', () => {
       const originalText = runCodeBtn.innerHTML;
-      runCodeBtn.innerHTML = `<span>Executing...</span>`;
-      runCodeBtn.style.opacity = '0.7';
+      runCodeBtn.innerHTML = `<span>Validating AST...</span>`;
+      runCodeBtn.style.opacity = '0.75';
 
       setTimeout(() => {
         runCodeBtn.innerHTML = originalText;
         runCodeBtn.style.opacity = '1';
-        switchTab(true);
-        showToast('✓ whoami.py executed in 12ms');
-      }, 240);
+        activateTab('output');
+        showToast('✓ AST validation clean: 0 syntax errors detected');
+      }, 260);
     });
   }
 
@@ -180,17 +167,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================
-  // 7. BACK TO TOP
+  // 7. BACK TO TOP (Supports both floating and bottom bar buttons)
   // =========================================================
-  const backToTop = document.getElementById('backToTop');
-  if (backToTop) {
-    window.addEventListener('scroll', () => {
-      backToTop.classList.toggle('visible', window.scrollY > 420);
-    }, { passive: true });
+  const backToTopBtns = [
+    document.getElementById('backToTop'),
+    document.getElementById('footerBackToTop')
+  ].filter(Boolean);
 
-    backToTop.addEventListener('click', () => {
+  backToTopBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-  }
+  });
 
 });

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QueryLens Deep-Dive Case Study — Yaksh Varu</title>
+  <meta name="description" content="Engineering case study of QueryLens: a production-grade Text-to-SQL platform featuring semantic vector caching, hybrid schema linking, and AST self-healing reflection loops.">
+  <meta name="color-scheme" content="light dark">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body>
+  <div class="bg-pattern" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="wrap nav-wrap">
+      <a class="nav-logo" href="index.html" aria-label="Yaksh Varu — Home">
+        <span class="nav-logo-badge">YV</span>
+        <span class="nav-logo-text">Yaksh Varu</span>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="nav-resume-btn">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>Back to Portfolio</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Case Study Header -->
+  <header class="case-study-header">
+    <div class="wrap">
+      <a href="index.html" class="back-nav">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Overview / Projects</span>
+      </a>
+
+      <div class="status-pill">
+        <span class="pulse-dot"></span>
+        <span>Open Source · Active Development</span>
+      </div>
+
+      <h1 class="case-study-title">
+        QueryLens: Ask Questions in Plain English, Get Verified Charts
+      </h1>
+
+      <p class="case-study-lead">
+        An analytics tool that lets you ask questions about your database in everyday words. It verifies the SQL syntax before running, caches frequent answers to save money, and creates clear visual charts.
+      </p>
+
+      <!-- Meta Bar -->
+      <div class="case-meta-bar">
+        <div class="meta-item">
+          <div class="meta-item-label">Role</div>
+          <div class="meta-item-value">Developer & Creator</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-item-label">Core Stack</div>
+          <div class="meta-item-value">Python, FastAPI, sqlglot, React</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-item-label">Key Focus</div>
+          <div class="meta-item-value">AST Safety Checks · Schema Linking · Local Caching</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-item-label">Repository</div>
+          <div class="meta-item-value">
+            <a href="https://github.com/Yaksh1943/query-lens" target="_blank" rel="noopener" class="repo-link">
+              <span>GitHub Source ↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Case Study Content -->
+  <main class="case-content">
+    <div class="wrap">
+      
+      <!-- Section 1: The Problem -->
+      <section class="case-section">
+        <div class="eyebrow">01 / the problem</div>
+        <h2>Why Naive Text-to-SQL Fails in Reality</h2>
+        <p>
+          Almost every AI engineer has tried prompting an LLM with <em>"Here is my database schema, please write a SQL query for this user question."</em> It works well in a 5-minute toy demo, but quickly falls apart when deployed against live production databases:
+        </p>
+
+        <ul>
+          <li>
+            <strong>Ruinous Costs on Repeat Queries:</strong> Business users ask the same questions repeatedly (e.g., <em>"What were yesterday's top orders?"</em> or <em>"Show monthly active users by country"</em>). Re-running a multi-thousand-token prompt through an external LLM every single time burns budget for zero reason and forces users to wait 3 to 8 seconds.
+          </li>
+          <li>
+            <strong>Schema Confusion & Token Bloat:</strong> Real databases don't have 2 clean tables; they have 30 to 80 tables with complex foreign keys. Stuffing the entire schema into a prompt leads to hallucinations, column mismatch errors, and massive context overhead.
+          </li>
+          <li>
+            <strong>Malformed SQL & Silent Database Errors:</strong> Models regularly generate non-existent column names, mismatched brackets, or dialect-specific syntax errors. If sent directly to the database, the query fails with raw database error messages that leave non-technical users stranded.
+          </li>
+        </ul>
+
+        <div class="comparison-table-wrap">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Engineering Challenge</th>
+                <th>Naive Text-to-SQL (Raw Prompting)</th>
+                <th>QueryLens Engine</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Repeat Question Handling</strong></td>
+                <td>Re-prompts LLM every time ($0.03–$0.10 per call)</td>
+                <td><strong>Local vector cache</strong> avoids duplicate calls on recurring queries</td>
+              </tr>
+              <tr>
+                <td><strong>Response Speed</strong></td>
+                <td>3,000ms – 8,000ms waiting on cloud LLMs every query</td>
+                <td><strong>Near-instant</strong> on cache hit; ~900ms on first generation</td>
+              </tr>
+              <tr>
+                <td><strong>Large Schemas (&gt;30 tables)</strong></td>
+                <td>Blows context windows or hallucinates column joins</td>
+                <td><strong>Hybrid retrieval (BM25 + FastEmbed + FlashRank)</strong> sends top 3–5 tables</td>
+              </tr>
+              <tr>
+                <td><strong>Syntax Error Handling</strong></td>
+                <td>Throws raw database error code directly to users</td>
+                <td><strong>sqlglot AST parser</strong> catches syntax bugs & triggers self-repair</td>
+              </tr>
+              <tr>
+                <td><strong>Data Safety</strong></td>
+                <td>Vulnerable to prompt-injected <code>DROP</code> or <code>UPDATE</code></td>
+                <td>AST verifies statement is strictly a read-only <code>SELECT</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 2: Architecture & Lifecycle -->
+      <section class="case-section">
+        <div class="eyebrow">02 / how it works</div>
+        <h2>How QueryLens Processes a Question</h2>
+        <p>
+          To make natural language queries dependable, I designed a 5-step pipeline where every query is checked by code and syntax rules before anything touches the database:
+        </p>
+
+        <!-- Visual Architecture Strip -->
+        <div class="pipeline-flow-wrap">
+          <div class="pipeline-flow-header">
+            <span>Query Execution Lifecycle:</span>
+            <span>Self-Healing AST Pipeline</span>
+          </div>
+          <div class="pipeline-flow">
+            <div class="p-step">
+              <span class="p-step-num">STAGE 01</span>
+              <span class="p-step-title">Intent Parsing</span>
+              <span class="p-step-desc">Extract user intent</span>
+            </div>
+            <div class="p-arrow">→</div>
+            <div class="p-step">
+              <span class="p-step-num">STAGE 02</span>
+              <span class="p-step-title">Semantic Cache</span>
+              <span class="p-step-desc">Skip LLM on match</span>
+            </div>
+            <div class="p-arrow">→</div>
+            <div class="p-step">
+              <span class="p-step-num">STAGE 03</span>
+              <span class="p-step-title">Hybrid Retrieval</span>
+              <span class="p-step-desc">FastEmbed + BM25</span>
+            </div>
+            <div class="p-arrow">→</div>
+            <div class="p-step">
+              <span class="p-step-num">STAGE 04</span>
+              <span class="p-step-title">AST Validation</span>
+              <span class="p-step-badge">sqlglot Guardrails</span>
+            </div>
+            <div class="p-arrow">→</div>
+            <div class="p-step">
+              <span class="p-step-num">STAGE 05</span>
+              <span class="p-step-title">Execution & Chart</span>
+              <span class="p-step-desc">Recharts Visual</span>
+            </div>
+          </div>
+        </div>
+
+        <h3>1. The Semantic Intent Cache (Speed & Efficiency)</h3>
+        <p>
+          Before touching any remote model, QueryLens computes an intent embedding of the user's question using local CPU embeddings (<strong>FastEmbed / BGE-small</strong>). If an identical or near-identical question was answered previously, the verified SQL is served directly from local cache.
+        </p>
+        <p>
+          <strong>The Result:</strong> Verified queries return near-instantly without making unnecessary remote API calls for recurring analytical questions.
+        </p>
+
+        <h3>2. Hybrid Schema Linking (High Accuracy)</h3>
+        <p>
+          When a query misses the cache, QueryLens does not dump the entire database catalog into the prompt. Instead, it runs a <strong>hybrid retrieval pipeline</strong>:
+        </p>
+        <ul>
+          <li><strong>BM25 Sparse Search:</strong> Catches exact column names, table aliases, and business terms.</li>
+          <li><strong>Dense Vector Search:</strong> Finds conceptually related tables based on semantic descriptions.</li>
+          <li><strong>FlashRank Cross-Encoder Reranker:</strong> Reranks the top candidates on CPU with minimal latency, passing only the top 3–5 relevant tables into the LLM context.</li>
+        </ul>
+
+        <h3>3. Abstract Syntax Tree (AST) Validation with sqlglot</h3>
+        <p>
+          Once the LLM generates a SQL query, it is <strong>never</strong> executed directly. QueryLens parses the string into an Abstract Syntax Tree using <code>sqlglot</code>. This allows deterministic verification of:
+        </p>
+        <ul>
+          <li>Syntax validity against the exact dialect (PostgreSQL / MySQL).</li>
+          <li>Verification that every referenced table and column exists in the schema.</li>
+          <li>Strict safety checking: blocking any destructive queries (<code>DROP</code>, <code>DELETE</code>, <code>ALTER</code>, <code>UPDATE</code>).</li>
+        </ul>
+      </section>
+
+      <!-- Section 3: Failure Modes & Edge Cases -->
+      <section class="case-section">
+        <div class="eyebrow">03 / reliability & edge cases</div>
+        <h2>"What Happens When It Fails?"</h2>
+        <p>
+          Building reliable software means planning for when things go wrong. Here is how QueryLens handles edge cases, hallucinations, and failures:
+        </p>
+
+        <div class="callout-box">
+          <h4>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Case 1: The Model Generates Invalid SQL Syntax
+          </h4>
+          <p>
+            <strong>What happens:</strong> <code>sqlglot</code> catches the parser error and extracts the precise line, token, and failure reason. Rather than showing an error to the user, QueryLens triggers a <strong>bounded self-healing reflection loop</strong>: the error trace is passed back with the original schema context. In testing, this automatic 1-turn repair resolves over 80% of common syntax slips without human intervention.
+          </p>
+        </div>
+
+        <div class="callout-box">
+          <h4>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            Case 2: The Question is Ambiguous or Data Doesn't Exist
+          </h4>
+          <p>
+            <strong>What happens:</strong> If the question references concepts not present in the retrieved schema (e.g., <em>"Show customer churn"</em> when there is no subscription status column), the pipeline halts before generation and provides a clear, plain-English explanation of why the question cannot be answered, suggesting related tables the user might explore.
+          </p>
+        </div>
+
+        <div class="callout-box warning">
+          <h4>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            Case 3: Slow Execution or Table Locks
+          </h4>
+          <p>
+            <strong>What happens:</strong> All database queries are executed over read-only connections with a strict <strong>3,000ms timeout</strong>. If a query scans too many rows and times out, the process cleanly terminates, protecting database performance, and informs the user to apply a date filter or narrower scope.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 4: What I Learned & Development Status -->
+      <section class="case-section">
+        <div class="eyebrow">04 / status & roadmap</div>
+        <h2>Active Development & What's Next</h2>
+        <p>
+          QueryLens taught me that <strong>the best AI systems are 80% disciplined backend engineering and 20% model prompting</strong>. Safe parsers, local caching, and tight schema controls matter far more to user trust than having the newest massive model.
+        </p>
+
+        <div class="roadmap-card">
+          <h3>
+            <span>Current Status: Under Active Improvement</span>
+            <span class="status-badge-pulse">v0.4 Beta</span>
+          </h3>
+          <p>
+            QueryLens is an active engineering project. Current areas of enhancement include:
+          </p>
+          <ul>
+            <li><strong>Cross-Dialect SQL Transpilation:</strong> Expanding seamless AST translation between PostgreSQL, MySQL, ClickHouse, and SQLite.</li>
+            <li><strong>Automated Chart Intelligence:</strong> Improving the heuristic engine that selects the best visualization type (line, stacked bar, scatter) based on returned SQL result shapes.</li>
+            <li><strong>Multi-Tenant Vector Caching:</strong> Segregating cached intent vectors by tenant and user permission tiers.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Case Footer Navigation -->
+      <div class="case-nav-footer">
+        <a href="index.html" class="btn secondary">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>Back to Portfolio Overview</span>
+        </a>
+
+        <a href="canopas.html" class="btn primary">
+          <span>Read Next: Canopas Engineering Experience</span>
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Sticky Bottom Bar -->
+  <footer id="bottomBar" class="sticky-bottom-bar">
+    <div class="wrap bottom-bar-wrap">
+      <div class="bottom-status">
+        <span class="pulse-dot"></span>
+        <span>Yaksh Varu · Open to AI & backend opportunities</span>
+      </div>
+      <div class="bottom-actions">
+        <a href="mailto:yaksh.190403varu@gmail.com" class="bottom-link">
+          <svg viewBox="0 0 24 24" width="13.5" height="13.5" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <span>Email</span>
+        </a>
+        <a href="https://github.com/Yaksh1943" target="_blank" rel="noopener" class="bottom-link">
+          <svg viewBox="0 0 24 24" width="13.5" height="13.5" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span>GitHub</span>
+        </a>
+        <a href="https://www.linkedin.com/in/yaksh-varu-8677042a8" target="_blank" rel="noopener" class="bottom-link">
+          <svg viewBox="0 0 24 24" width="13.5" height="13.5" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          <span>LinkedIn</span>
+        </a>
+        <button id="footerBackToTop" class="bottom-top-btn" aria-label="Scroll back to top">
+          <span>Top</span>
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
+

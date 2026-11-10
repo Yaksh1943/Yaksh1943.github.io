@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canopas Engineering Deep-Dive — Yaksh Varu</title>
+  <meta name="description" content="Engineering deep-dive of Yaksh Varu's work at Canopas: scaling conversational AI features to 50,000+ active users, implementing MCP tooling, and building LLM-as-a-judge evaluation pipelines.">
+  <meta name="color-scheme" content="light dark">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body>
+  <div class="bg-pattern" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="wrap nav-wrap">
+      <a class="nav-logo" href="index.html" aria-label="Yaksh Varu — Home">
+        <span class="nav-logo-badge">YV</span>
+        <span class="nav-logo-text">Yaksh Varu</span>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="nav-resume-btn">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>Back to Portfolio</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Case Study Header -->
+  <header class="case-study-header">
+    <div class="wrap">
+      <a href="index.html#experience" class="back-nav">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>Overview / Experience</span>
+      </a>
+
+      <div class="status-pill">
+        <span class="pulse-dot"></span>
+        <span>Work Experience · Canopas</span>
+      </div>
+
+      <h1 class="case-study-title">
+        Scaling Conversational AI to 50,000+ Users at Canopas
+      </h1>
+
+      <p class="case-study-lead">
+        How I helped build, test, and scale conversational features from a small beta to over 50,000 daily active users using FastAPI, Python, and AWS.
+      </p>
+
+      <!-- Meta Bar -->
+      <div class="case-meta-bar">
+        <div class="meta-item">
+          <div class="meta-item-label">Role</div>
+          <div class="meta-item-value">AI/ML Engineer</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-item-label">Timeline</div>
+          <div class="meta-item-value">Jul 2025 — Jul 2026</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-item-label">Scale</div>
+          <div class="meta-item-value">5K → 50K+ Users</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-item-label">Infrastructure</div>
+          <div class="meta-item-value">FastAPI, AWS SQS/S3/SES, PostgreSQL</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Case Study Content -->
+  <main class="case-content">
+    <div class="wrap">
+      
+      <!-- Section 1: The Challenge -->
+      <section class="case-section">
+        <div class="eyebrow">01 / the challenge</div>
+        <h2>Moving from Early Beta to Scale</h2>
+        <p>
+          At Canopas, our conversational AI features started with an initial cohort of 5,000 to 10,000 early users. As product adoption surged toward <strong>50,000+ active users</strong>, challenges that were invisible in early testing suddenly became critical:
+        </p>
+
+        <ul>
+          <li>
+            <strong>Silent Model Quality Regression:</strong> When updating prompt templates or testing newer foundation model versions, how do you verify that the changes don't subtly break existing user conversation personas or answer quality?
+          </li>
+          <li>
+            <strong>API Latency Under Traffic Spikes:</strong> Real-time voice and text chat cannot wait for synchronous third-party LLM calls, email dispatches, and analytics logging on the same thread.
+          </li>
+          <li>
+            <strong>Context Bleed & Memory:</strong> Users expect the AI assistant to remember key preferences and facts across multi-turn sessions without polluting prompt token limits.
+          </li>
+        </ul>
+
+        <div class="comparison-table-wrap">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>System Dimension</th>
+                <th>Early Prototype Stage (5K Users)</th>
+                <th>Production Architecture (50K+ Users)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Scale & Throughput</strong></td>
+                <td>Single instance, synchronous requests</td>
+                <td><strong>Asynchronous FastAPI microservices</strong> + connection pooling</td>
+              </tr>
+              <tr>
+                <td><strong>Prompt Quality Control</strong></td>
+                <td>Manual subjective "vibe checking"</td>
+                <td><strong>Automated LLM-as-a-judge</strong> evaluation benchmark suites</td>
+              </tr>
+              <tr>
+                <td><strong>Background Workflows</strong></td>
+                <td>Blocked the main HTTP request thread</td>
+                <td>Decoupled <strong>AWS SQS message queues</strong> with Dead-Letter Queues</td>
+              </tr>
+              <tr>
+                <td><strong>Tool Integrations</strong></td>
+                <td>Hard-coded, brittle point-to-point scripts</td>
+                <td>Standardized <strong>Model Context Protocol (MCP)</strong> tooling</td>
+              </tr>
+              <tr>
+                <td><strong>Failure Recovery</strong></td>
+                <td>Silent dropped requests during API throttling</td>
+                <td>Automated <strong>circuit breakers</strong> & exponential backoff retries</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 2: What I Built -->
+      <section class="case-section">
+        <div class="eyebrow">02 / implementation</div>
+        <h2>What I Engineered & Solved</h2>
+
+        <h3>1. Tooling via Model Context Protocol (MCP)</h3>
+        <p>
+          I helped design and implement feature workflows utilizing the <strong>Model Context Protocol (MCP)</strong>. Instead of hard-coding brittle, ad-hoc integrations for each model, MCP gave us a standardized protocol to expose application state, live user context, and notification endpoints to the AI engine safely.
+        </p>
+        <p>
+          This powered dynamic, context-aware notifications and personalized interactions that felt continuous rather than robotic and disconnected.
+        </p>
+
+        <h3>2. "LLM-as-a-Judge" Automated Evaluation Pipeline</h3>
+        <p>
+          One of the biggest risks in production AI is <em>silent prompt drift</em>—you change one sentence in a prompt to fix one bug, only to cause five subtle hallucinations in other areas.
+        </p>
+        <p>
+          To solve this, I helped build an automated <strong>LLM-as-a-judge evaluation harness</strong>:
+        </p>
+        <ul>
+          <li>Curated a gold-standard benchmark dataset representing real user edge cases and multi-turn conversations.</li>
+          <li>Ran automated test suites before deploying prompt or model updates, having a judge model grade the candidate outputs against accuracy, tone consistency, and safety criteria.</li>
+          <li>Eliminated subjective "vibe checks" and gave the team objective confidence before releasing updates to 50K+ people.</li>
+        </ul>
+
+        <h3>3. Event-Driven Asynchronous Backend (FastAPI + AWS SQS)</h3>
+        <p>
+          To keep user-facing REST endpoints sub-100ms, I decoupled all non-critical operations from the HTTP request-response cycle:
+        </p>
+        <ul>
+          <li>Built high-performance <strong>FastAPI microservices</strong> with asynchronous task execution.</li>
+          <li>Wired <strong>AWS SQS message queues</strong> to manage heavy background jobs (media asset processing, long-term memory ingestion, transactional email notifications via SES).</li>
+          <li>Designed resilient PostgreSQL schemas with clean database indexing for fast profile lookups.</li>
+        </ul>
+      </section>
+
+      <!-- Section 3: Handling Failure Modes -->
+      <section class="case-section">
+        <div class="eyebrow">03 / reliability in production</div>
+        <h2>"What Happened When Things Broke?"</h2>
+        <p>
+          Operating at 50,000+ users means failures happen daily. Here is how we engineered resilience into the system:
+        </p>
+
+        <div class="callout-box">
+          <h4>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+            Case 1: Third-Party Model Outages & Rate Limit Spikes
+          </h4>
+          <p>
+            <strong>Resolution:</strong> We implemented circuit breakers and fallback providers with exponential backoff. If our primary inference endpoint experienced rate throttling, requests seamlessly switched to secondary models with cached system prompt templates, preventing downtime for end users.
+          </p>
+        </div>
+
+        <div class="callout-box">
+          <h4>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+            Case 2: Background Task Queue Overflows
+          </h4>
+          <p>
+            <strong>Resolution:</strong> We configured <strong>Dead-Letter Queues (DLQs) on AWS SQS</strong> with CloudWatch alarm triggers. If a background notification or memory sync worker failed 3 times, the message was preserved in the DLQ for inspection rather than being dropped, allowing zero data loss during traffic spikes.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 4: Reflections & Takeaways -->
+      <section class="case-section">
+        <div class="eyebrow">04 / takeaways</div>
+        <h2>What I Took Away from Canopas</h2>
+        <p>
+          This experience solidified my engineering philosophy: <strong>real AI products are backend systems first, and model wrappers second</strong>. The models will constantly change, get cheaper, and get faster. But having solid background queues, automated evaluation baselines, and clean database schemas is what allows a product to scale sustainably.
+        </p>
+      </section>
+
+      <!-- Case Footer Navigation -->
+      <div class="case-nav-footer">
+        <a href="index.html#experience" class="btn secondary">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>Back to Portfolio Overview</span>
+        </a>
+
+        <a href="querylens.html" class="btn primary">
+          <span>Explore Next: QueryLens Case Study</span>
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Sticky Bottom Bar -->
+  <footer id="bottomBar" class="sticky-bottom-bar">
+    <div class="wrap bottom-bar-wrap">
+      <div class="bottom-status">
+        <span class="pulse-dot"></span>
+        <span>Yaksh Varu · Open to AI & backend opportunities</span>
+      </div>
+      <div class="bottom-actions">
+        <a href="mailto:yaksh.190403varu@gmail.com" class="bottom-link">
+          <svg viewBox="0 0 24 24" width="13.5" height="13.5" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <span>Email</span>
+        </a>
+        <a href="https://github.com/Yaksh1943" target="_blank" rel="noopener" class="bottom-link">
+          <svg viewBox="0 0 24 24" width="13.5" height="13.5" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span>GitHub</span>
+        </a>
+        <a href="https://www.linkedin.com/in/yaksh-varu-8677042a8" target="_blank" rel="noopener" class="bottom-link">
+          <svg viewBox="0 0 24 24" width="13.5" height="13.5" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          <span>LinkedIn</span>
+        </a>
+        <button id="footerBackToTop" class="bottom-top-btn" aria-label="Scroll back to top">
+          <span>Top</span>
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
+
