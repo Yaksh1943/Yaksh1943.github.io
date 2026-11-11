@@ -30,16 +30,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const navItems = document.querySelectorAll('.nav-link');
 
   const highlightNavOnScroll = () => {
+    if (!navItems.length || !sections.length) return;
+
     const scrollY = window.scrollY;
     let currentId = '';
 
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop - 140;
-      const sectionHeight = section.offsetHeight;
-      if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-        currentId = section.getAttribute('id') || '';
-      }
-    });
+    const isAtBottom =
+      window.innerHeight + Math.ceil(scrollY) >= document.documentElement.scrollHeight - 24;
+
+    if (isAtBottom) {
+      const lastSectionWithId = Array.from(sections).reverse().find(s => s.getAttribute('id'));
+      currentId = lastSectionWithId ? lastSectionWithId.getAttribute('id') : '';
+    } else {
+      const triggerOffset = Math.min(220, Math.round(window.innerHeight * 0.3));
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - triggerOffset;
+        const sectionHeight = section.offsetHeight;
+        if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+          currentId = section.getAttribute('id') || '';
+        }
+      });
+    }
 
     navItems.forEach(item => {
       item.classList.remove('active');
